@@ -20,6 +20,47 @@ _Oracle Linux and Unbreakable Enterprise Kernel (UEK) Releases:_
 
 
 
+Here’s the high-level UEK version mapping across Oracle Linux releases:
+| Oracle Linux Release | UEK Major Version | Example Kernel Version String                                        |
+| -------------------- | ----------------- | -------------------------------------------------------------------- |
+| **OEL 5**            | UEK R1            | `2.6.32-300.10.1.el5uek.x86_64`                                      |
+| **OEL 6**            | UEK R1 → R4       | `2.6.32-300.el6uek.x86_64` → `4.1.12-124.39.1.el6uek.x86_64`         |
+| **OEL 7**            | UEK R3 → R5       | `3.8.13-118.16.4.el7uek.x86_64` → `4.14.35-2047.505.1.el7uek.x86_64` |
+| **OEL 8**            | UEK R6 → R7       | `5.4.17-2011.0.7.el8uek.x86_64` → `5.15.x` (in later updates)        |
+
+
+#### Breakdown by UEK Release:
+
+- UEK R1 → Based on Linux 2.6.32 (OEL 5 & 6 early)
+- UEK R2 → Based on Linux 3.0.36 (rarely used widely, OL 6 only)
+- UEK R3 → Based on Linux 3.8.13 (OEL 6 late & OEL 7 early)
+- UEK R4 → Based on Linux 4.1.12 (OEL 6 late, OEL 7 mid)
+- UEK R5 → Based on Linux 4.14.35 (OEL 7 late, OEL 8 early betas)
+- UEK R6 → Based on Linux 5.4.17 (OEL 8)
+- UEK R7 → Based on Linux 5.15.x (OEL 8 latest updates)
+
+
+#### Oracle UEK Versions by OEL Release:
+| UEK Release | Kernel Version (approx) | Codename | Supported OEL Versions | Notes                                                                                        |
+| ----------- | ----------------------- | -------- | ---------------------- | -------------------------------------------------------------------------------------------- |
+| **UEK R1**  | 2.6.32.x                | –        | OEL 5, OEL 6           | First UEK release, optimized for Oracle DB workloads.                                        |
+| **UEK R2**  | 3.8.x                   | –        | OEL 5, OEL 6, OEL 7    | Major perf improvements, NUMA, DTrace.                                                       |
+| **UEK R3**  | 3.8.x → 3.18.x          | –        | OEL 6, OEL 7           | Long-term support, better scalability.                                                       |
+| **UEK R4**  | 4.1.x                   | –        | OEL 6, OEL 7           | More Docker/container support, large memory optimization.                                    |
+| **UEK R5**  | 4.14.x                  | –        | OEL 6, OEL 7, OEL 8    | Meltdown/Spectre patches, Oracle Cloud optimized.                                            |
+| **UEK R6**  | 5.4.x                   | –        | OEL 7, OEL 8           | **Kernel 5.4** base (e.g., 5.4.17-…el8uek), long-term stable, great for modern DB workloads. |
+| **UEK R7**  | 6.1.x                   | –        | OEL 8, OEL 9           | Latest long-term kernel, better performance, new hardware support.                           |
+
+
+### So, is it UEK6 or UEK7?
+- **UEK6** is generally based on 5.4.x kernels.
+- **UEK7** is based on 6.1.x kernels.
+- **5.15.x kernels** in Oracle Linux 8 are part of **UEK R6 Update releases** — Oracle started including 5.15 kernels as part of the UEK6 line as a backport/update for hardware enablement and security.
+
+#### In short:
+- `5.15.0-200.131.27.el8uek.x86_64` is a **UEK6 update kernel** with 5.15 base.
+- It is **not UEK7** (which is 6.1.x based).
+
 
 ### Check Current Kernel Version:
 
@@ -284,6 +325,64 @@ reboot
 uname -r
 
 4.18.0-553.5.1.el8_10.x86_64
+```
+
+
+### Install the specific kernel version:
+
+_Enable `ol8_UEKR6` repo:_
+```
+dnf config-manager --enable ol8_UEKR6
+dnf config-manager --disable ol8_UEKR6
+
+dnf repolist all
+```
+
+
+_Install Kernel:_
+```
+dnf install -y kernel-uek-5.4.17-2136.337.5.el8uek
+```
+
+
+_If remove Kernel:_
+```
+dnf remove -y kernel-uek-5.4.17-2136.337.5.el8uek
+```
+
+
+```
+ll -h /boot/vmlinuz*
+
+-rwxr-xr-x. 1 root root 13M Aug  6 00:23 /boot/vmlinuz-0-rescue-fcae1c255a0d495abdeff2cfa52daa0e
+-rwxr-xr-x. 1 root root 11M Nov 16  2023 /boot/vmlinuz-4.18.0-513.5.1.el8_9.x86_64
+-rwxr-xr-x. 1 root root 13M Oct  5  2023 /boot/vmlinuz-5.15.0-200.131.27.el8uek.x86_64
+-rwxr-xr-x  1 root root 11M Nov  5  2024 /boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
+```
+
+
+_Set the Default Kernel:_
+```
+grubby --set-default /boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
+```
+
+_Verify:_
+```
+grubby --default-kernel
+
+/boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
+```
+
+
+```
+reboot
+```
+
+
+```
+uname -r
+
+5.4.17-2136.337.5.el8uek.x86_64
 ```
 
 
