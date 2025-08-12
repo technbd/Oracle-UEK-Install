@@ -342,6 +342,10 @@ dnf repolist all
 _Install Kernel:_
 ```
 dnf install -y kernel-uek-5.4.17-2136.337.5.el8uek
+
+Or,
+
+dnf install -y kernel-4.18.0-553.16.1.el8_10.x86_64
 ```
 
 
@@ -356,6 +360,7 @@ ll -h /boot/vmlinuz*
 
 -rwxr-xr-x. 1 root root 13M Aug  6 00:23 /boot/vmlinuz-0-rescue-fcae1c255a0d495abdeff2cfa52daa0e
 -rwxr-xr-x. 1 root root 11M Nov 16  2023 /boot/vmlinuz-4.18.0-513.5.1.el8_9.x86_64
+-rwxr-xr-x  1 root root 11M Aug  8  2024 /boot/vmlinuz-4.18.0-553.16.1.el8_10.x86_64
 -rwxr-xr-x. 1 root root 13M Oct  5  2023 /boot/vmlinuz-5.15.0-200.131.27.el8uek.x86_64
 -rwxr-xr-x  1 root root 11M Nov  5  2024 /boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
 ```
@@ -364,13 +369,23 @@ ll -h /boot/vmlinuz*
 _Set the Default Kernel:_
 ```
 grubby --set-default /boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
+
+Or,
+
+grubby --set-default /boot/vmlinuz-4.18.0-553.16.1.el8_10.x86_64
 ```
+
 
 _Verify:_
 ```
 grubby --default-kernel
 
+
 /boot/vmlinuz-5.4.17-2136.337.5.el8uek.x86_64
+
+Or,
+
+/boot/vmlinuz-4.18.0-553.16.1.el8_10.x86_64
 ```
 
 
